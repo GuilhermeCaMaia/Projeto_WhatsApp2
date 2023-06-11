@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
 
 export function TelaDeCadastro({ navigation }) {
 
@@ -12,7 +13,8 @@ export function TelaDeCadastro({ navigation }) {
     const [email, setEmail] = useState(null);
     const [telefone, setTelefone] = useState(null);
     const [hash, setHash] = useState(null);
-    const API_URL = 'http://192.168.10.4:8080';
+    const [image64, setImage64] = useState(null);
+    const API_URL = 'http://192.168.10.3:8080'; // ip da maquina
 
     // id
     // nome
@@ -22,6 +24,31 @@ export function TelaDeCadastro({ navigation }) {
     // email
     // telefone
     // hash
+
+
+    const tirarFoto = async () => {
+        let permissaoCamera = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (permissaoCamera.granted === false) {
+            alert("Acesso a camera negado!");
+            return;
+        }
+
+        try {
+            let result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [4, 3],
+                quality: 1,
+            });
+            if (!result.canceled) {
+                avatarNovo(result.assets[0].uri);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     function novoID() {
         setID(new data().getMilliseconds);
@@ -41,13 +68,16 @@ export function TelaDeCadastro({ navigation }) {
     function telefoneNovo(telefone) {
         setTelefone(telefone);
     }
+    function avatarNovo(avatar) {
+        setAvatar(avatar);
+    }
 
     const botaoCadastrar = async () => {
         try {
             const response = await axios.post(`${API_URL}/user/`, {
                 nome: nome,
                 apelido: apelido,
-                // avatar: avatar,
+                avatar: avatar,
                 senha: senha,
                 email: email,
                 telefone: telefone
@@ -55,7 +85,7 @@ export function TelaDeCadastro({ navigation }) {
 
             console.log(response.config.data);
             navigation.navigate('Login')
-            Alert.alert('Usuario cadastrado com sucesso!');
+            // Alert.alert('Usuario cadastrado com sucesso!');
 
         } catch (error) {
             console.error('Erro no cadastrar:', error);
@@ -87,6 +117,14 @@ export function TelaDeCadastro({ navigation }) {
                         <TextInput style={styles.container}
                             onChangeText={telefoneNovo}
                         ></TextInput>
+                        <TouchableOpacity
+                            onPress={() => tirarFoto()}
+                        >
+                            <Image
+                                style={styles.foto}
+                                source={{ uri: avatar }}
+                            />
+                        </TouchableOpacity>
                         {/* avatar */}
 
                         <TouchableOpacity
@@ -140,5 +178,13 @@ const styles = StyleSheet.create({
     testoBotao: {
         color: '#FFFAFA',
         fontWeight: 'bold'
-    }
+    },
+    foto: {
+        alignItems: 'center',
+        backgroundColor: '#B0C4DE',
+        width: 100,
+        height: 100,
+        marginTop: 30,
+        borderRadius: 50,
+    },
 });

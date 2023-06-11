@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableOpacityBase, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, TouchableOpacityBase, View } from "react-native";
 
 export default function TelaDeLogin({ navigation }) {
 
@@ -8,7 +8,7 @@ export default function TelaDeLogin({ navigation }) {
     const [login, setLogin] = useState(null);
     const [password, setPassword] = useState(null);
     const [hash, setHash] = useState(null);
-    const API_URL = 'http://192.168.10.4:8080';
+    const API_URL = 'http://192.168.10.3:8080'; // ip da maquina
 
     function userIDNovo(id) {
         setID(id);
@@ -32,12 +32,14 @@ export default function TelaDeLogin({ navigation }) {
             const response = await axios.get(`${API_URL}/user/${login}/${password}`);
             console.log(response.data)
             let id = (String(response.data.id));
-            // userIDNovo(String(response.data.ID));
-            console.log((await axios.get(`${API_URL}/${id}`)).data);
+
+            // usar para o hash
+            // console.log((await axios.get(`${API_URL}/${id}`)).data);
             // let getHash = (await axios.get(`${API_URL}/${id}`)).data;
             // hashNovo(getHash);
 
             Alert.alert('Usuario logado com sucesso!');
+            console.log('Usuario logado com sucesso!');
         } catch (error) {
             console.error('erro ao logar! ', error);
         }
