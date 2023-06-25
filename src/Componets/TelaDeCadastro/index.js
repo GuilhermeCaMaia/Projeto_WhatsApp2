@@ -8,13 +8,13 @@ export function TelaDeCadastro({ navigation }) {
     const [id, setID] = useState(null);
     const [nome, setNome] = useState(null);
     const [apelido, setApelido] = useState(null);
-    const [avatar, setAvatar] = useState(null);
+    const [avatar, setAvatar] = useState("");
     const [senha, setSenha] = useState(null);
     const [email, setEmail] = useState(null);
     const [telefone, setTelefone] = useState(null);
     const [hash, setHash] = useState(null);
     const [image64, setImage64] = useState(null);
-    const API_URL = 'http://192.168.10.3:8080'; // ip da maquina
+    const API_URL = 'http://192.168.10.5:8080'; // ip da maquina
 
     // id
     // nome
@@ -26,7 +26,7 @@ export function TelaDeCadastro({ navigation }) {
     // hash
 
 
-    const tirarFoto = async () => {
+    async function tirarFoto() {
         let permissaoCamera = await ImagePicker.requestCameraPermissionsAsync();
 
         if (permissaoCamera.granted === false) {
@@ -35,14 +35,16 @@ export function TelaDeCadastro({ navigation }) {
         }
 
         try {
-            let result = await ImagePicker.launchCameraAsync({
+            // let result = await ImagePicker.launchCameraAsync
+            let result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
                 quality: 1,
+                base64: true,
             });
             if (!result.canceled) {
-                avatarNovo(result.assets[0].uri);
+                setAvatar(result.assets[0].base64)
             }
         } catch (error) {
             console.log(error);
@@ -122,7 +124,7 @@ export function TelaDeCadastro({ navigation }) {
                         >
                             <Image
                                 style={styles.foto}
-                                source={{ uri: avatar }}
+                                source={{ uri: 'data:image/jpeg;base64,' + avatar }}
                             />
                         </TouchableOpacity>
                         {/* avatar */}

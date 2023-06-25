@@ -8,7 +8,9 @@ export default function TelaDeLogin({ navigation }) {
     const [login, setLogin] = useState(null);
     const [password, setPassword] = useState(null);
     const [hash, setHash] = useState(null);
-    const API_URL = 'http://192.168.10.3:8080'; // ip da maquina
+    const [foto, setFoto] = useState(null);
+    const [avatar, setAvatar] = useState(null);
+    const API_URL = 'http://192.168.10.5:8080'; // ip da maquina
 
     function userIDNovo(id) {
         setID(id);
@@ -26,6 +28,10 @@ export default function TelaDeLogin({ navigation }) {
         setPassword(senha);
     }
 
+    function fotoDoUsuario(foto) {
+        setFoto(foto);
+    }
+
 
     const Logar = async () => {
         try {
@@ -38,8 +44,13 @@ export default function TelaDeLogin({ navigation }) {
             // let getHash = (await axios.get(`${API_URL}/${id}`)).data;
             // hashNovo(getHash);
 
+            // Colocar a imagem
+            // let foto = (String(response.data.avatar));
+
             Alert.alert('Usuario logado com sucesso!');
             console.log('Usuario logado com sucesso!');
+            console.log(id);
+            navigation.navigate('Contatos', { userID: id, login: response.data.telefone, nome: response.data.nome })
         } catch (error) {
             console.error('erro ao logar! ', error);
         }
@@ -48,6 +59,10 @@ export default function TelaDeLogin({ navigation }) {
     return (
         <View style={styles.corpo}>
             <View>
+                {/* <Image
+                    style={styles.foto}
+                    source={{ uri: avatar }}
+                /> */}
                 <Text style={styles.testo}>E-mail ou telefone do usuário</Text>
                 <TextInput style={styles.container}
                     onChangeText={loginNovo}
@@ -107,5 +122,13 @@ const styles = StyleSheet.create({
     testoBotao: {
         color: '#FFFAFA',
         fontWeight: 'bold'
-    }
+    },
+    foto: {
+        alignItems: 'center',
+        backgroundColor: '#B0C4DE',
+        width: 100,
+        height: 100,
+        marginTop: 30,
+        borderRadius: 50,
+    },
 });

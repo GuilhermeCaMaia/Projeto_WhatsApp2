@@ -6,6 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TelaDeEntrada from './src/Componets/TelaDeEntrada';
 import TelaDeLogin from './src/Componets/TelaDeLogin';
 import { TelaDeCadastro } from './src/Componets/TelaDeCadastro';
+import TelaContatos from './src/Componets/TelaContatos';
+import TelaDoChat from './src/Componets/TelaDoChat';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +18,8 @@ function MyStack() {
       <Stack.Screen name='Entrada' component={TelaDeEntrada} />
       <Stack.Screen name="Login" component={TelaDeLogin} />
       <Stack.Screen name="Cadastrar" component={TelaDeCadastro} />
+      <Stack.Screen name="Contatos" component={TelaContatos} />
+      <Stack.Screen name="Chat" component={TelaDoChat} />
     </Stack.Navigator>
   );
 }
