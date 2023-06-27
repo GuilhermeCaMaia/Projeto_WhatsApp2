@@ -10,7 +10,7 @@ export default function TelaDeLogin({ navigation }) {
     const [hash, setHash] = useState(null);
     const [foto, setFoto] = useState(null);
     const [avatar, setAvatar] = useState(null);
-    const API_URL = 'http://192.168.10.5:8080'; // ip da maquina
+    const API_URL = 'http://192.168.10.15:8080'; // ip da maquina
 
     function userIDNovo(id) {
         setID(id);
@@ -34,18 +34,11 @@ export default function TelaDeLogin({ navigation }) {
 
 
     const Logar = async () => {
+
         try {
             const response = await axios.get(`${API_URL}/user/${login}/${password}`);
             console.log(response.data)
             let id = (String(response.data.id));
-
-            // usar para o hash
-            // console.log((await axios.get(`${API_URL}/${id}`)).data);
-            // let getHash = (await axios.get(`${API_URL}/${id}`)).data;
-            // hashNovo(getHash);
-
-            // Colocar a imagem
-            // let foto = (String(response.data.avatar));
 
             Alert.alert('Usuario logado com sucesso!');
             console.log('Usuario logado com sucesso!');
@@ -54,6 +47,17 @@ export default function TelaDeLogin({ navigation }) {
         } catch (error) {
             console.error('erro ao logar! ', error);
         }
+
+        return logarUsuario(telefone, senha).then(data => {
+            if (data) {
+                navigation.navigate("Mensagens")
+                return Promise.resolve(data);
+            }
+            else
+                return Promise.resolve(null);
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     return (

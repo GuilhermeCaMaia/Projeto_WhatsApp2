@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FlatList } from "react-native";
 import Lista from "../Lista";
 
-const API_URL = 'http://192.168.10.5:8080';
+const API_URL = 'http://192.168.10.15:8080';
 
 export default function TelaContatos(navigation) {
     const [listarDeContatos, setListaContato] = useState([]);
@@ -16,6 +16,7 @@ export default function TelaContatos(navigation) {
     const login = navigation.route.params.login;
     const nome = navigation.route.params.nome;
 
+    console.log(navigation)
     async function carregarContatos() {
 
         axios.get(`${API_URL}/message/buscarUsuarios/${login}`)
@@ -47,13 +48,16 @@ export default function TelaContatos(navigation) {
         carregarContatos();
     }
 
-    function acessarConversa() {
-        navigation.navigate('Chat');
+    function acessarConversa(idDoOutroUsuario) {
+        novaConverca(idDoOutroUsuario);
         console.log("Abrindo tela com lista de contatos")
     }
 
-    async function novaConverca() {
+    async function novaConverca(idDoOutroUsuario) {
         const response = await axios.get(`${API_URL}/message/buscarUsuarios/${login}`)
+        let id = (String(response.data.id));
+        console.log(idDoOutroUsuario);
+        navigation.navigation.navigate('Chat', { userID: userID, otherUserID: idDoOutroUsuario });
     }
 
     useEffect(() => {
@@ -63,32 +67,12 @@ export default function TelaContatos(navigation) {
 
     return (
         <View style={styles.conteiner}>
-            {/* <FlatList
-                data={login}
-                keyExtractor={(item) => String(item.id)}
-                showsVerticalScrollIndicator={false}
-                renderItem={({ item }) =>
-                    <TouchableOpacity onPress={checarMensagem}>
-                        <Lista id={item.id} avatar={item.avatar} nome={item.nome} />
-
-
-                        <View>
-                        <Image>
-                            style={styles.usuarioImage}
-                            source={{ uri: 'data:image/jpeg;base64,' + item.avatar }}
-                        </Image>
-                        <View>
-                            <Text>{item.nome}</Text>
-                        </View>
-                    </View>
-                    </TouchableOpacity>
-                }
-            /> */}
             <ScrollView>
                 {listarDeContatos.map(item => {
                     if (item.id != userID)
                         return (
-                            <TouchableOpacity onPress={checarMensagem}
+                            <TouchableOpacity
+                                onPress={() => acessarConversa(item.id)}
                                 key={item.id}
                             >
                                 <Lista id={item.id} avatar={item.avatar} nome={item.nome}></Lista>
@@ -102,8 +86,8 @@ export default function TelaContatos(navigation) {
 const styles = StyleSheet.create({
     conteiner: {
         flex: 1,
-        backgroundColor: '#0E0D0D',
-        alignItems: 'baseline'
+        backgroundColor: '#2F4F4F',
+        alignItems: 'baseline',
     },
     usuarioImage: {
         alignItems: 'flex-start',

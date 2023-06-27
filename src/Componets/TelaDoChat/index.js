@@ -1,46 +1,53 @@
-
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { StyleSheet, Text } from "react-native";
 import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
-const API_URL = 'http://192.168.10.5:8080';
+const API_URL = 'http://192.168.10.15:8080';
 
-export default function TelaDoChat({ navigation, userID, otherUserID }) {
-    const [newMessagem, setNewMessagem] = useState(null);
-    const [conversas, setConversas] = useState(null);
+export default function TelaDoChat({ route, navigation, userID, otherUserID }) {
+    const [newMessagem, setNewMessagem] = useState("");
+    const [conversas, setConversas] = useState([]);
+    const scrollViewRef = useRef();
 
-    async function carregarMensagem(id, otherId) {
-        const mensagem = (await axios.get(`${API_URL}/message/buscarMensagensComUmUsuario/${id}/${otherId}`)).data;
+    // console.log(route.params.userID);
+    // console.log(route.params.otherUserID);
+    let id = route.params.userID;
+    let outroId = route.params.otherUserID;
+    async function carregarMensagem(id, outroId) {
+        const mensagem = (await axios.get(`${API_URL}/message/buscarMensagensComUmUsuario/${id}/${outroId}`)).data;
+        setConversas(mensagem);
     }
 
     async function enviarMessage() {
         const dados = {
-            "idFrom": parseInt(userID),
-            "idTo": otherUserID,
+            "idFrom": parseInt(route.params.userID),//trocar aqui 
+            "idTo": route.params.otherUserID,
             "mensagem": newMessagem
         };
-        console, log(dados);
+        console.log(dados);
         try {
             const response = await axios.post(`${API_URL}/message/enviarMensagem`, dados);
         } catch (erro) {
             console.log(erro);
         } finally {
             console.log(newMessagem);
-            carregarMensagem(userID, otherUserID);
+            carregarMensagem(route.params.userID, route.params.otherUserID);
             setNewMessagem('');
         }
     };
 
     useEffect(() => {
-
-        carregarMensagem(userID, otherUserID);
+        scrollViewRef.current.scrollToEnd({ animated: true });
+        carregarMensagem(id, outroId);
     }, [conversas]);
 
     return (
-        <View>
+        <View style={styles.container}>
             <ScrollView
-
+                ref={scrollViewRef}
+                contentContainerStyle={styles.messageContainer}
+                onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
             >
                 {conversas.map(message => (
                     <View
@@ -50,11 +57,10 @@ export default function TelaDoChat({ navigation, userID, otherUserID }) {
                             message.from.id == userID ? styles.rightAlign : styles.leftAlign
                         ]}
                     >
-                        <Text style={styles.messageText}>{message.mensagem}</Text>
+                        <Text style={styles.messageText}>:{message.mensagem}</Text>
                     </View>
                 ))}
             </ScrollView>
-
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
@@ -75,10 +81,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#E5E5E5',
         paddingBottom: 10,
-    },
-    messagesContainer: {
-        flexGrow: 1,
-        padding: 10,
     },
     messageContainer: {
         padding: 10,
@@ -109,17 +111,13 @@ const styles = StyleSheet.create({
         borderColor: '#CCCCCC',
         borderRadius: 20,
         marginRight: 10,
+        backgroundColor: '#DCF8C0',
     },
     sendButton: {
         paddingVertical: 8,
         paddingHorizontal: 12,
-        backgroundColor: '#000',
+        backgroundColor: '#00FF7F',
         color: '#fff',
         borderRadius: 20,
-    },
-    sendButtonText: {
-        color: '#FFFFFF',
-        fontSize: 16,
-        fontWeight: 'bold',
     },
 });

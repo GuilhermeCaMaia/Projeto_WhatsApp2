@@ -14,7 +14,7 @@ export function TelaDeCadastro({ navigation }) {
     const [telefone, setTelefone] = useState(null);
     const [hash, setHash] = useState(null);
     const [image64, setImage64] = useState(null);
-    const API_URL = 'http://192.168.10.5:8080'; // ip da maquina
+    const API_URL = 'http://192.168.10.15:8080'; // ip da maquina
 
     // id
     // nome

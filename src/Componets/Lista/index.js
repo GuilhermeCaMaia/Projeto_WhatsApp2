@@ -8,7 +8,6 @@ export default function Lista(item) {
         <View style={styles.container}>
             <Image style={styles.usuarioFoto}
                 source={{ uri: 'data:image/jpeg;base64,' + item.avatar }}
-            // source={props.avatar ? { uri: `data:image/png;base64,${props.avatar}` } : require('../../../assets/photoIcon.png')}
             />
             <View >
                 <Text style={styles.campoNome}>{item.nome}</Text>
@@ -20,21 +19,33 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        backgroundColor: '#E5E5E5',
+        // backgroundColor: '#0E0D0D',
+        // alignItems: 'center',
+        // justifyContent: 'space-around',
+        // borderTopColor: '#000',
+        // borderTopWidth: 2,
+        // marginBottom: 5,
+        marginTop: 10,
+        height: 60,
+        backgroundColor: '#363636',
+        borderRadius: 10,
+        paddingHorizontal: 50,
+        fontSize: 16,
         alignItems: 'center',
-        justifyContent: 'space-around',
-        borderTopColor: '#000',
-        borderTopWidth: 2,
-        marginBottom: 5
+        justifyContent: 'flex-start',
+        elevation: 20,
+        shadowOpacity: 20,
     },
     nomeContainer: {
         width: '78%',
         height: '100%',
-        marginLeft: 20,
+        marginLeft: 25,
+        marginBottom: 25,
         justifyContent: 'center',
 
     },
     campoNome: {
+        color: "#FFF",
         width: '100%',
         height: '50%',
         fontSize: 25,
@@ -46,7 +57,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#B0C4DE',
         width: 50,
         height: 50,
-        marginTop: 30,
+        marginTop: 20,
+        marginRight: 20,
+        marginBottom: 20,
         borderRadius: 50,
     },
 });
