@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, Text } from "react-native";
@@ -5,11 +6,10 @@ import { ScrollView, TextInput, TouchableOpacity, View } from "react-native";
 
 const API_URL = 'http://192.168.10.15:8080';
 
-export default function TelaDoChat({ route, navigation, userID, otherUserID }) {
+export default function TelaDoChat({ nome, route, navigation, userID, otherUserID }) {
     const [newMessagem, setNewMessagem] = useState("");
     const [conversas, setConversas] = useState([]);
     const scrollViewRef = useRef();
-    let usuario = null;
 
     // console.log(route.params.userID);
     // console.log(route.params.otherUserID);
@@ -51,16 +51,19 @@ export default function TelaDoChat({ route, navigation, userID, otherUserID }) {
                 contentContainerStyle={styles.messageContainer}
                 onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: true })}
             >
-                {conversas.map(message => (
-                    <View
-                        key={message.id}
-                        styles={[
-                            styles.messageContainer,
-                        ]}
-                    >
-                        <Text style={styles.tamanhoMensagem}>{message.mensagem}</Text>
-                    </View>
-                ))}
+                {conversas.map(message => {
+                    // console.log(message);
+                    return (
+                        <View
+                            key={message.id}
+                            style={[
+                                styles.messageContainer,
+                            ]}
+                        >
+                            <Text style={styles.tamanhoMensagem}>{message.from.nome}: {message.mensagem}</Text>
+                        </View>
+                    );
+                })}
             </ScrollView>
             <View style={styles.inputContainer}>
                 <TextInput
@@ -71,7 +74,7 @@ export default function TelaDoChat({ route, navigation, userID, otherUserID }) {
                 />
                 <TouchableOpacity style={styles.sendButton}
                     onPress={enviarMessage}>
-                    <Text>enviar</Text>
+                    <MaterialCommunityIcons name="send" size={24} color="black" />
                 </TouchableOpacity>
             </View>
         </View>
