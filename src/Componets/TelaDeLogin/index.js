@@ -48,25 +48,11 @@ export default function TelaDeLogin({ navigation }) {
             console.error('erro ao logar! ', error);
         }
 
-        return logarUsuario(telefone, senha).then(data => {
-            if (data) {
-                navigation.navigate("Mensagens")
-                return Promise.resolve(data);
-            }
-            else
-                return Promise.resolve(null);
-        }).catch((err) => {
-            console.log(err);
-        })
     }
 
     return (
         <View style={styles.corpo}>
             <View>
-                {/* <Image
-                    style={styles.foto}
-                    source={{ uri: avatar }}
-                /> */}
                 <Text style={styles.testo}>E-mail ou telefone do usuário</Text>
                 <TextInput style={styles.container}
                     onChangeText={loginNovo}

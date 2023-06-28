@@ -9,6 +9,7 @@ export default function TelaDoChat({ route, navigation, userID, otherUserID }) {
     const [newMessagem, setNewMessagem] = useState("");
     const [conversas, setConversas] = useState([]);
     const scrollViewRef = useRef();
+    let usuario = null;
 
     // console.log(route.params.userID);
     // console.log(route.params.otherUserID);
@@ -16,12 +17,13 @@ export default function TelaDoChat({ route, navigation, userID, otherUserID }) {
     let outroId = route.params.otherUserID;
     async function carregarMensagem(id, outroId) {
         const mensagem = (await axios.get(`${API_URL}/message/buscarMensagensComUmUsuario/${id}/${outroId}`)).data;
+        mensagem.sort((a, b) => new Date(a.dataHora) - new Date(b.dataHora)); //para deixar as mesgens em ordem de envio
         setConversas(mensagem);
     }
 
     async function enviarMessage() {
         const dados = {
-            "idFrom": parseInt(route.params.userID),//trocar aqui 
+            "idFrom": parseInt(route.params.userID),
             "idTo": route.params.otherUserID,
             "mensagem": newMessagem
         };
@@ -54,10 +56,9 @@ export default function TelaDoChat({ route, navigation, userID, otherUserID }) {
                         key={message.id}
                         styles={[
                             styles.messageContainer,
-                            message.from.id == userID ? styles.rightAlign : styles.leftAlign
                         ]}
                     >
-                        <Text style={styles.messageText}>:{message.mensagem}</Text>
+                        <Text style={styles.tamanhoMensagem}>{message.mensagem}</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -87,15 +88,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10,
     },
-    leftAlign: {
-        alignSelf: 'flex-start',
-        backgroundColor: '#F2F2F2',
-    },
-    rightAlign: {
-        alignSelf: 'flex-end',
-        backgroundColor: '#DCF8C0',
-    },
-    messageText: {
+    tamanhoMensagem: {
         fontSize: 16,
     },
     inputContainer: {
