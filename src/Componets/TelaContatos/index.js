@@ -30,21 +30,10 @@ export default function TelaContatos(navigation) {
             }).finally(
                 await AsyncStorage.setItem('horaAtualizacao', String(new Date()))
             );
-        // if (response) {
-        // if (response.status == 400) { }
-        // else
-        //     setListaContato(response.data);
-
-        // navigation.navigate('Chat', { userID: id })
     }
-
-    // function chamarDetalhes(otherID) {
-    //     navigation.navigate('Chat', {otherUserID: otherID})
-    // }
 
     async function checarMensagem() {
         let ultimaAtualizacao = await AsyncStorage.getItem('horaAtualizacao');
-        // novaConverca();
         carregarContatos();
     }
 

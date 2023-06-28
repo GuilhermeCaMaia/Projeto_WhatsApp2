@@ -117,6 +117,7 @@ export function TelaDeCadastro({ navigation }) {
                         ></TextInput>
                         <Text style={styles.testo}>Telefone:</Text>
                         <TextInput style={styles.container}
+                            keyboardType="numeric"
                             onChangeText={telefoneNovo}
                         ></TextInput>
                         <TouchableOpacity

@@ -53,8 +53,9 @@ export default function TelaDeLogin({ navigation }) {
     return (
         <View style={styles.corpo}>
             <View>
-                <Text style={styles.testo}>E-mail ou telefone do usuário</Text>
+                <Text style={styles.testo}>Telefone do usuário</Text>
                 <TextInput style={styles.container}
+                    keyboardType="numeric"
                     onChangeText={loginNovo}
                 />
                 <Text style={styles.testo}>Senha:</Text>

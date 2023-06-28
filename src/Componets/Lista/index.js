@@ -19,12 +19,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        // backgroundColor: '#0E0D0D',
-        // alignItems: 'center',
-        // justifyContent: 'space-around',
-        // borderTopColor: '#000',
-        // borderTopWidth: 2,
-        // marginBottom: 5,
         marginTop: 10,
         height: 60,
         backgroundColor: '#363636',
